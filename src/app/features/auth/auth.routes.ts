@@ -10,12 +10,6 @@ import { loginGuard } from '../../core/guards/login.guard';
 })
 export class MeComponent {}
 
-@Component({
-  standalone: true,
-  template: `<h2>Logging out...</h2>`
-})
-export class LogoutComponent {}
-
 export const AUTH_ROUTES: Routes = [
   {
     path: '',
@@ -30,11 +24,6 @@ export const AUTH_ROUTES: Routes = [
   {
     path: 'me',
     component: MeComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path: 'logout',
-    component: LogoutComponent,
     canActivate: [authGuard]
   }
 ];

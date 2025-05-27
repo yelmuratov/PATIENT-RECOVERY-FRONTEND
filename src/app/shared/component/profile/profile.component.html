@@ -1,0 +1,56 @@
+<!-- Loading State -->
+<div *ngIf="isLoading" class="text-center py-12 text-lg animate-pulse"
+     [ngClass]="isDarkMode ? 'text-gray-400' : 'text-gray-500'">
+  ⏳ Loading your profile...
+</div>
+
+<!-- Profile Card -->
+<div *ngIf="!isLoading && user"
+     class="max-w-2xl mx-auto p-8 rounded-2xl shadow-xl transition-all duration-300"
+     [ngClass]="isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-800'">
+
+  <!-- Header Section -->
+  <div class="flex items-center gap-6 mb-8">
+    <img
+      [src]="'https://api.dicebear.com/7.x/initials/svg?seed=' + user.fullName"
+      alt="User Avatar"
+      class="w-24 h-24 rounded-full border-4 border-indigo-500 shadow-md"
+    />
+    <div>
+      <h2 class="text-3xl font-bold mb-1">{{ user.fullName }}</h2>
+      <p class="text-sm font-medium uppercase tracking-wide"
+         [ngClass]="isDarkMode ? 'text-indigo-300' : 'text-indigo-600'">
+        {{ user.role }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Details Section -->
+  <div class="space-y-4 text-sm leading-relaxed">
+    <div>
+      <span class="font-semibold">📩 Email:</span>
+      <span class="ml-2">{{ user.email }}</span>
+    </div>
+
+    <ng-container *ngIf="role === 'Patient'">
+      <div *ngIf="user.phoneNumber">
+        <span class="font-semibold">📞 Phone:</span>
+        <span class="ml-2">{{ user.phoneNumber }}</span>
+      </div>
+      <div *ngIf="user.dateOfBirth">
+        <span class="font-semibold">🎂 Date of Birth:</span>
+        <span class="ml-2">{{ user.dateOfBirth }}</span>
+      </div>
+      <div>
+        <span class="font-semibold">👨‍⚕️ Doctor:</span>
+        <span class="ml-2">{{ doctorName || user.doctor }}</span>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="role === 'Moderator'">
+      <div class="text-sm italic text-red-500 mt-4">
+        🛡️ You are logged in as a Moderator. Functionality is limited in this version.
+      </div>
+    </ng-container>
+  </div>
+</div>
