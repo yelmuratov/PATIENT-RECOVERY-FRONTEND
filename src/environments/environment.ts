@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://curevia.tech/api'
+  apiUrl: 'https://curevia.tech/api'
 };
