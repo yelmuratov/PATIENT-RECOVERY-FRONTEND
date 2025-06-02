@@ -45,7 +45,7 @@ jobs:
         username: root
         key: ${{ secrets.DO_SSH_KEY }}
         source: "dist/app/browser/*"
-        target: "/var/www/html/"
-        strip_components: 3
+        target: "/root/assignments/PatientRecoverySystem/PatientRecoverySystem/src/PatientRecoverySystem.API/wwwroot/"
         overwrite: true
         timeout: 120s
+
