@@ -51,7 +51,7 @@ export class AskConsultationComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private theme = inject(ThemeService);
 
-  patientId: number = 0;  // Replace with real patientId
+  patientId: number = 0; 
   symptomDescription: string = '';
   errorMessage: string = '';
   isDarkMode = false;
