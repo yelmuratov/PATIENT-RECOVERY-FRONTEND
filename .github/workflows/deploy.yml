@@ -33,10 +33,12 @@ jobs:
     - name: 📦 Install Dependencies
       run: |
         npm install --legacy-peer-deps
+
     # 5️⃣ Run Angular Build
     - name: 🏗️ Build Angular App
       run: |
         npm run build -- --configuration production
+
     # 6️⃣ Deploy built files to SaaS Server via SSH SCP
     - name: 🚀 Deploy Frontend via SCP
       uses: appleboy/scp-action@v0.1.4
@@ -44,10 +46,10 @@ jobs:
         host: ${{ secrets.DO_HOST }}
         username: root
         key: ${{ secrets.DO_SSH_KEY }}
-        source: "dist/app/browser/* dist/app/3rdpartylicenses.txt dist/app/prerendered-routes.json"
+        source: |
+          dist/app/browser/*
+          dist/app/3rdpartylicenses.txt
+          dist/app/prerendered-routes.json
         target: "/root/assignments/PatientRecoverySystem/PatientRecoverySystem/src/PatientRecoverySystem.API/wwwroot/"
         overwrite: true
         timeout: 120s
-
-
-
