@@ -14,8 +14,5 @@ export const DOCTOR_ROUTES: Routes = [
   { path: 'create', component: CreateDoctorComponent },
   { path: 'edit/:id', component: EditDoctorComponent },
   { path: ':id', component: DoctorDetailComponent },
-  {
-    path: 'my-patients/:doctorId',
-    component: PatientByDoctorIdComponent
-  }
+  {path: 'my-patients/:doctorId',component: PatientByDoctorIdComponent}
 ];
