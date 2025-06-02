@@ -62,7 +62,7 @@ export class AskConsultationComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(dark => this.isDarkMode = dark);
 
-    // In real app — replace with authenticated patient id:
+    // In real app — replace with authenticated patient id: test
     this.patientId = 1;
   }
 
