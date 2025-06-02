@@ -12,34 +12,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣ Checkout Repository
     - name: 📥 Checkout Repository
       uses: actions/checkout@v3
 
-    # 2️⃣ Use proper Node version (Angular 19+ likes >=18)
     - name: 🛠️ Install Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
 
-    # 3️⃣ Cache npm dependencies for faster builds
     - name: ♻️ Cache Node Modules
       uses: actions/cache@v3
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
 
-    # 4️⃣ Install dependencies (with legacy-peer-deps to avoid npm conflicts)
     - name: 📦 Install Dependencies
       run: |
         npm install --legacy-peer-deps
 
-    # 5️⃣ Run Angular Build with correct base-href (root)
     - name: 🏗️ Build Angular App
       run: |
         npm run build -- --configuration production --base-href /
 
-    # 6️⃣ Deploy built files to correct backend static folder
     - name: 🚀 Deploy Frontend via SCP
       uses: appleboy/scp-action@v0.1.4
       with:
@@ -47,6 +41,6 @@ jobs:
         username: root
         key: ${{ secrets.DO_SSH_KEY }}
         source: "dist/app/browser/*"
-        target: "/root/assignments/PatientRecoverySystem/PatientRecoverySystem/src/PatientRecoverySystem.API/wwwroot/dist/app/browser"
+        target: "/root/assignments/frontend-deploy/"
         overwrite: true
         timeout: 120s
