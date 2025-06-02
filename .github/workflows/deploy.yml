@@ -36,7 +36,7 @@ jobs:
     # 5️⃣ Run Angular Build
     - name: 🏗️ Build Angular App
       run: |
-        npm run build -- --configuration production
+        npm run build -- --configuration production --base-href /
     # 6️⃣ Deploy built files to SaaS Server via SSH SCP
     - name: 🚀 Deploy Frontend via SCP
       uses: appleboy/scp-action@v0.1.4
