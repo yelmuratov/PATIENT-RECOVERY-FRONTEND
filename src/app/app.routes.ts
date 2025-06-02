@@ -17,8 +17,12 @@ export const routes: Routes = [
     loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
   },
   {
+    path: 'patient',
+    canActivate: [authGuard],
+    loadChildren: () => import('./features/patient/patient.routes').then(m => m.PATIENT_ROUTES)
+  },
+  {
     path: '**',
     loadComponent: () => import('./shared/component/not-found/not-found.component').then(m => m.NotFoundComponent)
   }
 ];
-

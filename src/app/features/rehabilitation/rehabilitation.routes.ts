@@ -1,44 +1,18 @@
 import { Routes } from '@angular/router';
-import { Component } from '@angular/core';
-
-@Component({
-  standalone: true,
-  template: `<h2>Rehabilitation Dashboard</h2>`
-})
-export class RehabilitationComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Create Rehab Plan</h2>`
-})
-export class CreateRehabPlanComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Update Rehab Plan</h2>`
-})
-export class EditRehabPlanComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Update Rehab Progress</h2>`
-})
-export class UpdateRehabProgressComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Patient Progress</h2>`
-})
-export class PatientRehabProgressComponent {}
+import { RehabilitationComponent } from '../../shared/component/rehabilitation/rehabilitation.component';
+import { CreateRehabilitationPlanComponent } from '../../shared/component/create-rehab/create-rehab.component';
+import { EditRehabPlanComponent } from '../../shared/component/edit-rehab-plan/edit-rehab-plan.component';
+import { UpdateRehabProgressComponent } from '../../shared/component/update-rehab/update-rehab.component';
+import { PatientRehabProgressComponent } from '../../shared/component/patient-rehab-progress/patient-rehab-progress.component';
 
 export const REHABILITATION_ROUTES: Routes = [
   {
     path: '',
-    component: RehabilitationComponent // Default overview page
+    component: RehabilitationComponent 
   },
   {
     path: 'create-plan/:patientId',
-    component: CreateRehabPlanComponent
+    component: CreateRehabilitationPlanComponent
   },
   {
     path: 'edit-plan/:id',

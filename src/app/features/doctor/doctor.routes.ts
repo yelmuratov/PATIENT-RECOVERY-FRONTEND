@@ -1,45 +1,15 @@
 import { Routes } from '@angular/router';
-import { Component } from '@angular/core';
+import { DoctorComponent } from '../../shared/component/doctor/doctor.component';
+import { CreateDoctorComponent } from '../../shared/component/create-doctor/create-doctor.component';
+import { EditDoctorComponent } from '../../shared/component/edit-doctor/edit-doctor.component';
+import { DoctorDetailComponent } from '../../shared/component/doctor-detail/doctor-detail.component';
 
-@Component({
-  standalone: true,
-  template: `<h2>Doctor Feature Works!</h2>`
-})
-export class DoctorComponent {}
 
-@Component({
-  standalone: true,
-  template: `<h2>Create Doctor</h2>`
-})
-export class CreateDoctorComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Edit Doctor</h2>`
-})
-export class EditDoctorComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Doctor Details</h2>`
-})
-export class DoctorDetailComponent {}
+// Routes
 
 export const DOCTOR_ROUTES: Routes = [
-  {
-    path: '',
-    component: DoctorComponent // list all doctors
-  },
-  {
-    path: 'create',
-    component: CreateDoctorComponent
-  },
-  {
-    path: 'edit/:id',
-    component: EditDoctorComponent
-  },
-  {
-    path: ':id',
-    component: DoctorDetailComponent
-  }
+  { path: '', component: DoctorComponent },
+  { path: 'create', component: CreateDoctorComponent },
+  { path: 'edit/:id', component: EditDoctorComponent },
+  { path: ':id', component: DoctorDetailComponent }
 ];

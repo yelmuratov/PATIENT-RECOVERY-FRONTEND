@@ -37,9 +37,9 @@
 
   <!-- Statistics Section -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-2">
-    
-    <!-- AdminDoctor Stats -->
-    <ng-container *ngIf="role === 'AdminDoctor'">
+
+    <!-- AdminDoctor & Moderator Stats -->
+    <ng-container *ngIf="role === 'AdminDoctor' || role === 'Moderator'">
       <div [ngClass]="isDarkMode ? 'bg-gray-900 text-indigo-400' : 'bg-white text-indigo-700'"
            class="p-6 rounded-xl shadow text-center hover:shadow-md transition">
         <h3 [ngClass]="isDarkMode ? 'text-gray-400' : 'text-gray-500'" class="text-sm">👨‍⚕️ Total Doctors</h3>
@@ -66,18 +66,47 @@
       </div>
     </ng-container>
 
-    <!-- Patient Stats -->
+    <!-- Patient Full Dashboard -->
     <ng-container *ngIf="role === 'Patient'">
-      <div [ngClass]="isDarkMode ? 'bg-gray-900 text-indigo-400' : 'bg-white text-indigo-700'"
-           class="p-6 rounded-xl shadow text-center hover:shadow-md transition">
-        <h3 [ngClass]="isDarkMode ? 'text-gray-400' : 'text-gray-500'" class="text-sm">🩺 Your Doctor</h3>
-        <p class="text-3xl font-bold">{{ stats.doctorName || user.doctor || 'Not Assigned' }}</p>
+      
+      <!-- My Recovery -->
+      <div class="p-6 rounded-xl shadow text-center hover:shadow-md transition"
+           [ngClass]="isDarkMode ? 'bg-gray-900 text-indigo-400' : 'bg-white text-indigo-700'">
+        <h3 class="text-xl font-semibold mb-2">📈 My Recovery</h3>
+        <p class="text-3xl font-bold">{{ stats.recoveryLogs ?? 0 }}</p>
+        <p class="text-sm opacity-70">Recovery Logs</p>
       </div>
-      <div [ngClass]="isDarkMode ? 'bg-gray-900 text-indigo-400' : 'bg-white text-indigo-700'"
-           class="p-6 rounded-xl shadow text-center hover:shadow-md transition">
-        <h3 [ngClass]="isDarkMode ? 'text-gray-400' : 'text-gray-500'" class="text-sm">🧠 Active Plan</h3>
-        <p class="text-3xl font-bold">{{ stats.activePlan || 'N/A' }}</p>
+
+      <!-- My Symptoms -->
+      <div class="p-6 rounded-xl shadow text-center hover:shadow-md transition"
+           [ngClass]="isDarkMode ? 'bg-gray-900 text-indigo-400' : 'bg-white text-indigo-700'">
+        <h3 class="text-xl font-semibold mb-2">🩺 My Symptoms</h3>
+        <p class="text-3xl font-bold">{{ stats.consultations ?? 0 }}</p>
+        <p class="text-sm opacity-70">Consultations</p>
       </div>
+
+      <!-- System Advice -->
+      <div class="p-6 rounded-xl shadow text-center hover:shadow-md transition col-span-1 md:col-span-2"
+           [ngClass]="isDarkMode ? 'bg-gray-900 text-indigo-400' : 'bg-white text-indigo-700'">
+        <h3 class="text-xl font-semibold mb-2">🤖 System Advice</h3>
+        <p class="text-lg mt-2">AI assistance coming soon...</p>
+      </div>
+
+      <!-- Prescriptions -->
+      <div class="p-6 rounded-xl shadow text-center hover:shadow-md transition"
+           [ngClass]="isDarkMode ? 'bg-gray-900 text-indigo-400' : 'bg-white text-indigo-700'">
+        <h3 class="text-xl font-semibold mb-2">💊 My Prescriptions</h3>
+        <p class="text-lg mt-2">No prescriptions yet.</p>
+      </div>
+
+      <!-- Rehab Plan -->
+      <div class="p-6 rounded-xl shadow text-center hover:shadow-md transition"
+           [ngClass]="isDarkMode ? 'bg-gray-900 text-indigo-400' : 'bg-white text-indigo-700'">
+        <h3 class="text-xl font-semibold mb-2">🏃 Rehab Plan</h3>
+        <p class="text-lg mt-2">{{ stats.activePlan ?? 'No active plan' }}</p>
+      </div>
+
     </ng-container>
+
   </div>
 </div>

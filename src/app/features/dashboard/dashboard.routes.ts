@@ -25,6 +25,11 @@ export const DASHBOARD_ROUTES: Routes = [
           import('../patient/patient.routes').then(m => m.PATIENT_ROUTES)
       },
       {
+        path:'patient-profile',
+        loadChildren:()=>
+          import('../patient-dashboard/patient-dashboard.routes').then(m=>m.PATIENT_DASHBOARD_ROUTES)
+      },
+      {
         path: 'consultation',
         loadChildren: () =>
           import('../consultation/consultation.routes').then(m => m.CONSULTATION_ROUTES)

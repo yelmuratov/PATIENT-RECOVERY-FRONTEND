@@ -1,0 +1,31 @@
+<div class="p-6 bg-white rounded shadow">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Doctor List</h2>
+    <a routerLink="create" class="bg-blue-500 text-white px-4 py-2 rounded">Create New</a>
+  </div>
+
+  <table class="w-full text-left border">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="p-2 border">Name</th>
+        <th class="p-2 border">Email</th>
+        <th class="p-2 border">Phone</th>
+        <th class="p-2 border">Specialization</th>
+        <th class="p-2 border">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doctor of doctors">
+        <td class="p-2 border">{{doctor.firstName}} {{doctor.lastName}}</td>
+        <td class="p-2 border">{{doctor.email}}</td>
+        <td class="p-2 border">{{doctor.phoneNumber}}</td>
+        <td class="p-2 border">{{doctor.specialization}}</td>
+        <td class="p-2 border">
+          <a [routerLink]="['/doctor', doctor.id]" class="text-blue-600">View</a> |
+          <a [routerLink]="['/doctor/edit', doctor.id]" class="text-yellow-500">Edit</a> |
+          <button class="text-red-600" (click)="delete(doctor.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

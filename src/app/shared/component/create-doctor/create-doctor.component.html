@@ -1,0 +1,53 @@
+<div class="p-6 bg-white rounded shadow">
+  <h2 class="text-2xl font-bold mb-4">Create Doctor</h2>
+
+  <form (ngSubmit)="save()" class="space-y-4">
+
+    <!-- Full Name (combined firstName + lastName logic handled in component) -->
+    <input 
+      class="p-2 border rounded w-full" 
+      [(ngModel)]="doctor.fullName" 
+      name="fullName" 
+      placeholder="Full Name" 
+      required 
+    />
+
+    <!-- Email -->
+    <input 
+      class="p-2 border rounded w-full" 
+      [(ngModel)]="doctor.email" 
+      name="email" 
+      type="email" 
+      placeholder="Email" 
+      required 
+    />
+
+    <!-- Password -->
+    <input 
+      class="p-2 border rounded w-full" 
+      [(ngModel)]="doctor.password" 
+      name="password" 
+      type="password" 
+      placeholder="Password" 
+      required 
+    />
+
+    <!-- Role selection -->
+    <select 
+      class="p-2 border rounded w-full" 
+      [(ngModel)]="doctor.role" 
+      name="role" 
+      required>
+      <option [ngValue]="0">AdminDoctor</option>
+      <option [ngValue]="1">Doctor</option>
+      <option [ngValue]="2">Moderator</option>
+      <option [ngValue]="3">Patient</option>
+    </select>
+
+    <button 
+      type="submit" 
+      class="bg-blue-500 text-white px-4 py-2 rounded">
+      Save
+    </button>
+  </form>
+</div>

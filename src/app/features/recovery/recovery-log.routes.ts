@@ -1,56 +1,16 @@
 import { Routes } from '@angular/router';
-import { Component } from '@angular/core';
+import { RecoveryLogComponent } from '../../shared/component/recoverylog/recoverylog.component';
+import { CreateRecoveryLogComponent } from '../../shared/component/create-recovery/create-recovery.component';
+import { EditRecoveryLogComponent } from '../../shared/component/edit-recovery/edit-recovery.component';
+import { RecoveryLogDetailComponent } from '../../shared/component/recovery-detail/recovery-detail.component';
+import { RecoveryLogByPatientComponent } from '../../shared/component/recovery-by-patient/recovery-by-patient.component';
+import { RecoveryLogByDoctorComponent } from '../../shared/component/recovery-by-doctor/recovery-by-doctor.component';
 
-@Component({
-  standalone: true,
-  template: `<h2>RecoveryLog Feature Works!</h2>`
-})
-export class RecoveryLogComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Create RecoveryLog</h2>`
-})
-export class CreateRecoveryLogComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Edit RecoveryLog</h2>`
-})
-export class EditRecoveryLogComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>RecoveryLog Details</h2>`
-})
-export class RecoveryLogDetailComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Patient's RecoveryLogs</h2>`
-})
-export class RecoveryLogByPatientComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>Doctor's RecoveryLogs</h2>`
-})
-export class RecoveryLogByDoctorComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>All RecoveryLogs</h2>`
-})
-export class AllRecoveryLogsComponent {}
 
 export const RECOVERY_LOG_ROUTES: Routes = [
   {
     path: '',
-    component: RecoveryLogComponent // Default overview or dashboard
-  },
-  {
-    path: 'all',
-    component: AllRecoveryLogsComponent
+    component: RecoveryLogComponent // This already loads all by default
   },
   {
     path: 'create/:patientId',

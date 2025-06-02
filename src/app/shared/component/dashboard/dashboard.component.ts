@@ -1,10 +1,10 @@
-// src/app/shared/component/dashboard/dashboard.component.ts
 import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { ThemeService } from '../../../core/services/theme.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -18,6 +18,8 @@ export default class DashboardComponent implements OnInit {
   stats: any = {};
   isLoading = true;
   isDarkMode = false;
+
+  chartData: any = null;  // CHART DATA for AdminDoctor & Moderator
 
   private destroyRef = inject(DestroyRef);
 
@@ -68,13 +70,14 @@ export default class DashboardComponent implements OnInit {
   }
 
   loadDashboardData(role: string): void {
-    if (role === 'AdminDoctor') {
+    if (role === 'AdminDoctor' || role === 'Moderator') {
       Promise.all([
         this.http.get<any>(`${environment.apiUrl}/Doctor`, { withCredentials: true }).toPromise(),
         this.http.get<any>(`${environment.apiUrl}/Patient`, { withCredentials: true }).toPromise()
       ]).then(([doctors, patients]) => {
         this.stats.totalDoctors = doctors?.items?.length || 0;
         this.stats.totalPatients = patients?.items?.length || 0;
+        this.prepareChartData(); // build chart after loading stats
         this.isLoading = false;
       }).catch(() => this.isLoading = false);
     }
@@ -91,23 +94,39 @@ export default class DashboardComponent implements OnInit {
       }).catch(() => this.isLoading = false);
     }
 
-    else if (role === 'Patient') {
-      const patientId = this.user.id;
-      this.http.get<any>(`${environment.apiUrl}/Rehabilitation/progress/${patientId}`, { withCredentials: true }).subscribe({
-        next: (progress) => {
-          this.stats.activePlan = progress?.progressNote || 'No active plan';
-          this.isLoading = false;
-        },
-        error: () => {
-          this.stats.activePlan = 'Unavailable';
-          this.isLoading = false;
-        }
-      });
-    }
+else if (role === 'Patient') {
+  const patientId = this.user.id;
+
+  Promise.all([
+    this.http.get<any>(`${environment.apiUrl}/RecoveryLog/patient/${patientId}`, { withCredentials: true }).toPromise(),
+    this.http.get<any>(`${environment.apiUrl}/Consultation/patient/${patientId}`, { withCredentials: true }).toPromise(),
+    this.http.get<any>(`${environment.apiUrl}/Rehabilitation/progress/${patientId}`, { withCredentials: true }).toPromise()
+  ])
+  .then(([recoveryLogs, consultations, rehabProgress]) => {
+    this.stats.recoveryLogs = recoveryLogs?.length || 0;
+    this.stats.consultations = consultations?.length || 0;
+    this.stats.activePlan = rehabProgress?.progressNote || 'No active plan';
+    this.isLoading = false;
+  })
+  .catch(() => {
+    this.isLoading = false;
+  });
+}
 
     else {
-      // For Moderator or unsupported role
       this.isLoading = false;
     }
+  }
+
+  private prepareChartData(): void {
+    this.chartData = {
+      labels: ['Doctors', 'Patients'],
+      datasets: [{
+        label: 'System Statistics',
+        data: [this.stats.totalDoctors, this.stats.totalPatients],
+        backgroundColor: ['#6366F1', '#EC4899'],
+        borderRadius: 8
+      }]
+    };
   }
 }
