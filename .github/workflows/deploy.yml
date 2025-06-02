@@ -44,9 +44,10 @@ jobs:
         host: ${{ secrets.DO_HOST }}
         username: root
         key: ${{ secrets.DO_SSH_KEY }}
-        source: "dist/app/**/*"
+        source: "dist/app/browser/* dist/app/3rdpartylicenses.txt dist/app/prerendered-routes.json"
         target: "/root/assignments/PatientRecoverySystem/PatientRecoverySystem/src/PatientRecoverySystem.API/wwwroot/"
         overwrite: true
         timeout: 120s
+
 
 
