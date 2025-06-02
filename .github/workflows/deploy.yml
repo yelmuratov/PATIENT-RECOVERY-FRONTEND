@@ -12,35 +12,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1️⃣ Checkout Repository
     - name: 📥 Checkout Repository
       uses: actions/checkout@v3
 
+    # 2️⃣ Install Node.js
     - name: 🛠️ Install Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
 
+    # 3️⃣ Cache Node Modules
     - name: ♻️ Cache Node Modules
       uses: actions/cache@v3
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
 
+    # 4️⃣ Install Dependencies
     - name: 📦 Install Dependencies
       run: |
         npm install --legacy-peer-deps
 
+    # 5️⃣ Build Angular App
     - name: 🏗️ Build Angular App
       run: |
-        npm run build -- --configuration production --base-href /
+        npm run build 
 
+    # 6️⃣ Deploy built files to SaaS Server
     - name: 🚀 Deploy Frontend via SCP
       uses: appleboy/scp-action@v0.1.4
       with:
         host: ${{ secrets.DO_HOST }}
         username: root
         key: ${{ secrets.DO_SSH_KEY }}
-        source: "dist/app/browser/*"
+        source: "dist/**/*"
         target: "/root/assignments/frontend-deploy/"
         overwrite: true
         timeout: 120s
