@@ -1,37 +1,9 @@
 import { Routes } from '@angular/router';
-import { Component } from '@angular/core';
-
-// Temporary static placeholders (standalone components)
-
-@Component({
-  standalone: true,
-  template: `<h2>📈 My Recovery</h2>`
-})
-export class MyRecoveryComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>🩺 My Symptoms</h2>`
-})
-export class MySymptomsComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>🤖 System Advice</h2>`
-})
-export class SystemAdviceComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>💊 My Prescriptions</h2>`
-})
-export class MyPrescriptionsComponent {}
-
-@Component({
-  standalone: true,
-  template: `<h2>🏃 Rehab Plan</h2>`
-})
-export class MyRehabPlanComponent {}
+import { MyRecoveryComponent } from '../../shared/patient-components/my-recovery/my-recovery.component';
+import { MySymptomsComponent } from '../../shared/patient-components/my-symtoms/my-symtoms.component';
+import { SystemAdviceComponent } from '../../shared/patient-components/system-advice/system-advice.component';
+import { MyPrescriptionsComponent } from '../../shared/patient-components/my-prescriptions/my-prescriptions.component';
+import { MyRehabPlanComponent } from '../../shared/patient-components/my-rehab-plan/my-rehab-plan.component';
 
 export const PATIENT_DASHBOARD_ROUTES: Routes = [
   {

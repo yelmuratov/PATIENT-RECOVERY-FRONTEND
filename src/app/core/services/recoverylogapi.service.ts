@@ -17,6 +17,18 @@ export interface RecoveryLogDto {
   doctorId: number;
 }
 
+export interface CreateRecoveryLogDto {
+  temperature: number;
+  heartRate: number;
+  systolic: number;
+  diastolic: number;
+  painLevel: number;
+  timestamp: string;
+  description?: string;
+  isEmergency: boolean;
+  doctorId: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class RecoveryLogApiService {
   private http = inject(HttpClient);
@@ -43,9 +55,9 @@ export class RecoveryLogApiService {
   }
 
   // Create log for patient
-  create(patientId: number, log: RecoveryLogDto): Observable<RecoveryLogDto> {
-    return this.http.post<RecoveryLogDto>(`${this.baseUrl}/${patientId}`, log, { withCredentials: true });
-  }
+create(patientId: number, log: CreateRecoveryLogDto): Observable<RecoveryLogDto> {
+  return this.http.post<RecoveryLogDto>(`${this.baseUrl}/${patientId}`, log, { withCredentials: true });
+}
 
   // Update log
   update(id: number, log: RecoveryLogDto): Observable<void> {

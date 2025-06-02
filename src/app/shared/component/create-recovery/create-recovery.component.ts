@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RecoveryLogApiService ,RecoveryLogDto} from '../../../core/services/recoverylogapi.service';
+import { RecoveryLogApiService, CreateRecoveryLogDto } from '../../../core/services/recoverylogapi.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { PatientApiService, PatientDto } from '../../../core/services/patient-api.service';
+import { DoctorApiService, DoctorDto } from '../../../core/services/doctor-api.service';
 
 @Component({
   standalone: true,
   selector: 'app-create-recovery-log',
   imports: [CommonModule, FormsModule],
   template: `
-  <div class="p-6 rounded-xl shadow-lg w-full max-w-4xl mx-auto"
+  <div class="p-6 rounded-xl shadow-lg w-full max-w-5xl mx-auto"
        [ngClass]="isDarkMode ? 'bg-slate-800 text-white' : 'bg-white text-slate-900'">
 
     <h2 class="text-3xl font-bold mb-6">➕ Create Recovery Log</h2>
@@ -21,68 +23,61 @@ import { ThemeService } from '../../../core/services/theme.service';
     </div>
 
     <form (ngSubmit)="save()" class="space-y-4">
+
+      <!-- Patient Select -->
+      <div>
+        <label class="block font-semibold mb-1">Patient:</label>
+        <select class="p-3 border rounded w-full" [(ngModel)]="selectedPatientId" name="patientId" required>
+          <option value="" disabled selected>Select Patient</option>
+          <option *ngFor="let p of patients" [value]="p.id">{{ p.fullName }}</option>
+        </select>
+      </div>
+
+      <!-- Doctor Select -->
+      <div>
+        <label class="block font-semibold mb-1">Doctor:</label>
+        <select class="p-3 border rounded w-full" [(ngModel)]="log.doctorId" name="doctorId" required>
+          <option value="" disabled selected>Select Doctor</option>
+          <option *ngFor="let d of doctors" [value]="d.id">{{ d.fullName }}</option>
+        </select>
+      </div>
+
       <div class="grid grid-cols-2 gap-4">
 
-        <input class="p-3 border rounded col-span-2"
-               [(ngModel)]="log.patientId"
-               name="patientId"
-               type="number"
-               placeholder="Patient ID"
-               required />
+        <div>
+          <label>Temperature:</label>
+          <input class="p-3 border rounded w-full" [(ngModel)]="log.temperature" name="temperature" type="number" required />
+        </div>
 
-        <input class="p-3 border rounded col-span-2"
-               [(ngModel)]="log.doctorId"
-               name="doctorId"
-               type="number"
-               placeholder="Doctor ID"
-               required />
+        <div>
+          <label>Heart Rate:</label>
+          <input class="p-3 border rounded w-full" [(ngModel)]="log.heartRate" name="heartRate" type="number" required />
+        </div>
 
-        <input class="p-3 border rounded col-span-2"
-               [(ngModel)]="log.temperature"
-               name="temperature"
-               type="number"
-               placeholder="Temperature"
-               required />
+        <div>
+          <label>Systolic:</label>
+          <input class="p-3 border rounded w-full" [(ngModel)]="log.systolic" name="systolic" type="number" required />
+        </div>
 
-        <input class="p-3 border rounded col-span-2"
-               [(ngModel)]="log.heartRate"
-               name="heartRate"
-               type="number"
-               placeholder="Heart Rate"
-               required />
+        <div>
+          <label>Diastolic:</label>
+          <input class="p-3 border rounded w-full" [(ngModel)]="log.diastolic" name="diastolic" type="number" required />
+        </div>
 
-        <input class="p-3 border rounded col-span-2"
-               [(ngModel)]="log.systolic"
-               name="systolic"
-               type="number"
-               placeholder="Systolic"
-               required />
+        <div>
+          <label>Pain Level (0-10):</label>
+          <input class="p-3 border rounded w-full" [(ngModel)]="log.painLevel" name="painLevel" type="number" required />
+        </div>
 
-        <input class="p-3 border rounded col-span-2"
-               [(ngModel)]="log.diastolic"
-               name="diastolic"
-               type="number"
-               placeholder="Diastolic"
-               required />
+        <div class="col-span-2">
+          <label>Timestamp:</label>
+          <input class="p-3 border rounded w-full" [(ngModel)]="log.timestamp" name="timestamp" type="datetime-local" required />
+        </div>
 
-        <input class="p-3 border rounded col-span-2"
-               [(ngModel)]="log.painLevel"
-               name="painLevel"
-               type="number"
-               placeholder="Pain Level (0-10)"
-               required />
-
-        <textarea class="p-3 border rounded col-span-2"
-                  [(ngModel)]="log.description"
-                  name="description"
-                  placeholder="Additional Description (optional)">
-        </textarea>
-
-        <input class="p-3 border rounded col-span-2"
-               [(ngModel)]="log.timestamp"
-               name="timestamp"
-               type="datetime-local"
-               required />
+        <div class="col-span-2">
+          <label>Description:</label>
+          <textarea class="p-3 border rounded w-full" [(ngModel)]="log.description" name="description"></textarea>
+        </div>
 
         <div class="col-span-2 flex items-center gap-3">
           <label>Is Emergency:</label>
@@ -108,12 +103,17 @@ import { ThemeService } from '../../../core/services/theme.service';
 })
 export class CreateRecoveryLogComponent implements OnInit {
   private service = inject(RecoveryLogApiService);
+  private patientService = inject(PatientApiService);
+  private doctorService = inject(DoctorApiService);
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private theme = inject(ThemeService);
 
-  log: RecoveryLogDto = {
-    patientId: 0,
+  patients: PatientDto[] = [];
+  doctors: DoctorDto[] = [];
+  selectedPatientId: number | null = null;
+
+  log: CreateRecoveryLogDto = {
     doctorId: 0,
     temperature: 0,
     heartRate: 0,
@@ -130,18 +130,29 @@ export class CreateRecoveryLogComponent implements OnInit {
 
   ngOnInit() {
     this.theme.loadTheme();
-    this.theme.darkModeChanges
+    this.theme.darkModeChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(dark => this.isDarkMode = dark);
+
+    // Load patients
+    this.patientService.getAll()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(dark => this.isDarkMode = dark);
+      .subscribe(result => this.patients = result.items ?? []);
+
+    // Load doctors
+    this.doctorService.getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => this.doctors = result.items.filter(doc => doc.role === 1));
   }
 
   save() {
-    this.errorMessage = '';
+    if (!this.selectedPatientId) {
+      this.errorMessage = 'Please select patient';
+      return;
+    }
 
-    this.service.create(this.log.patientId, this.log)
+    this.service.create(this.selectedPatientId, this.log)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => this.router.navigate(['/dashboard/recovery-log']),
+        next: () => this.router.navigate(['/dashboard/recovery']),
         error: (err) => {
           console.error(err);
           this.errorMessage = err?.error?.message || 'An unexpected error occurred.';
@@ -150,6 +161,6 @@ export class CreateRecoveryLogComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/dashboard/recovery-log']);
+    this.router.navigate(['/dashboard/recovery']);
   }
 }

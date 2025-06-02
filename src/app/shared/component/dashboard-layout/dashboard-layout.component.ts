@@ -87,4 +87,7 @@ export class DashboardLayoutComponent implements OnInit {
   get isPatient(): boolean {
     return this.userRole === UserRole.Patient;
   }
+  get doctorId(): number | null {
+  return this.userRole === UserRole.Doctor ? this.user?.id : null;
+}
 }

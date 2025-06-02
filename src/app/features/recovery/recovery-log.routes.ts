@@ -6,11 +6,14 @@ import { RecoveryLogDetailComponent } from '../../shared/component/recovery-deta
 import { RecoveryLogByPatientComponent } from '../../shared/component/recovery-by-patient/recovery-by-patient.component';
 import { RecoveryLogByDoctorComponent } from '../../shared/component/recovery-by-doctor/recovery-by-doctor.component';
 
-
 export const RECOVERY_LOG_ROUTES: Routes = [
   {
     path: '',
-    component: RecoveryLogComponent // This already loads all by default
+    component: RecoveryLogComponent 
+  },
+  {
+    path: 'create',
+    component: CreateRecoveryLogComponent
   },
   {
     path: 'create/:patientId',
@@ -29,7 +32,7 @@ export const RECOVERY_LOG_ROUTES: Routes = [
     component: RecoveryLogByDoctorComponent
   },
   {
-    path: ':id',
+    path: 'details/:id', 
     component: RecoveryLogDetailComponent
   }
 ];

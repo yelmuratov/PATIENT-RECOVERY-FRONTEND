@@ -44,7 +44,7 @@
           <a routerLink="/dashboard/patient-profile/rehab-plan" [ngClass]="navClass">🏃 Rehab Plan</a>
         </ng-container>
         <ng-container *ngIf="isDoctor">
-          <a routerLink="/dashboard/my-patients" [ngClass]="navClass">👥 My Patients</a>
+          <a [routerLink]="['/dashboard/doctor/my-patients', doctorId]" [ngClass]="navClass">👥 My Patients</a>
         </ng-container>
         <!-- Profile -->
         <a routerLink="/dashboard/profile" [ngClass]="navClass">🙍 Profile</a>

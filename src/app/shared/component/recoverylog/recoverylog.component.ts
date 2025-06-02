@@ -10,49 +10,44 @@ import { ThemeService } from '../../../core/services/theme.service';
   selector: 'app-recovery-log',
   imports: [CommonModule, RouterModule],
   template: `
-  <div class="p-6 rounded-xl shadow-lg w-full max-w-7xl mx-auto"
-       [ngClass]="isDarkMode ? 'bg-slate-800 text-white' : 'bg-white text-slate-900'">
+<div class="p-6 rounded-xl shadow-lg w-full max-w-7xl mx-auto"
+     [ngClass]="isDarkMode ? 'bg-slate-800 text-white' : 'bg-white text-slate-900'">
 
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-3xl font-bold">📊 Recovery Logs</h2>
-      <a routerLink="create" class="px-5 py-2 rounded-lg text-white font-semibold"
-         [ngClass]="isDarkMode ? 'bg-indigo-500 hover:bg-indigo-600' : 'bg-indigo-600 hover:bg-indigo-700'">
-        ➕ Add Log
-      </a>
-    </div>
-
-    <table class="w-full border-collapse">
-      <thead>
-        <tr [ngClass]="isDarkMode ? 'bg-slate-700' : 'bg-slate-200'">
-          <th class="p-3 text-left">Patient</th>
-          <th class="p-3 text-left">Doctor</th>
-          <th class="p-3 text-left">Date</th>
-          <th class="p-3 text-left">Pain Level</th>
-          <th class="p-3 text-left">Emergency</th>
-          <th class="p-3 text-left">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let log of logs" class="hover:bg-slate-100 dark:hover:bg-slate-700 transition">
-          <td class="p-3">#{{ log.patientId }}</td>
-          <td class="p-3">#{{ log.doctorId }}</td>
-          <td class="p-3">{{ log.timestamp | date:'yyyy-MM-dd' }}</td>
-          <td class="p-3">{{ log.painLevel }}</td>
-          <td class="p-3">
-            <span [ngClass]="log.isEmergency ? 'text-red-500 font-bold' : 'text-green-500'">
-              {{ log.isEmergency ? 'Emergency' : 'Normal' }}
-            </span>
-          </td>
-          <td class="p-3 flex gap-3">
-            <a [routerLink]="['/dashboard/recovery-log', log.id]" class="text-blue-500">View</a>
-            <a [routerLink]="['/dashboard/recovery-log/edit', log.id]" class="text-yellow-400">Edit</a>
-            <button class="text-red-500" (click)="log.id !== undefined && delete(log.id)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-3xl font-bold">📊 Recovery Logs</h2>
+    <a [routerLink]="['/dashboard/recovery/create']"
+       class="px-5 py-2 rounded-lg text-white font-semibold"
+       [ngClass]="isDarkMode ? 'bg-indigo-500 hover:bg-indigo-600' : 'bg-indigo-600 hover:bg-indigo-700'">
+      ➕ Add Log
+    </a>
   </div>
+
+  <table class="w-full border-collapse">
+    <thead>
+      <tr [ngClass]="isDarkMode ? 'bg-slate-700' : 'bg-slate-200'">
+        <th class="p-3 text-left">Patient</th>
+        <th class="p-3 text-left">Doctor</th>
+        <th class="p-3 text-left">Date</th>
+        <th class="p-3 text-left">Pain Level</th>
+        <th class="p-3 text-left">Emergency</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let log of logs" class="hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+        <td class="p-3">#{{ log.patientId }}</td>
+        <td class="p-3">#{{ log.doctorId }}</td>
+        <td class="p-3">{{ log.timestamp | date:'yyyy-MM-dd' }}</td>
+        <td class="p-3">{{ log.painLevel }}</td>
+        <td class="p-3">
+          <span [ngClass]="log.isEmergency ? 'text-red-500 font-bold' : 'text-green-500'">
+            {{ log.isEmergency ? 'Emergency' : 'Normal' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
   `
 })
 export class RecoveryLogComponent implements OnInit {
@@ -78,15 +73,5 @@ export class RecoveryLogComponent implements OnInit {
       .subscribe(result => {
         this.logs = result;
       });
-  }
-
-  delete(id: number) {
-    if (confirm('Are you sure?')) {
-      this.service.delete(id)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(() => {
-          this.logs = this.logs.filter(l => l.id !== id);
-        });
-    }
   }
 }
