@@ -1,0 +1,51 @@
+name: Frontend Deploy to SaaS Server
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  NODE_OPTIONS: --max_old_space_size=4096
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1️⃣ Checkout Repository
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v3
+
+    # 2️⃣ Use proper Node version (Angular 19+ likes >=18)
+    - name: 🛠️ Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    # 3️⃣ Cache npm dependencies for faster builds
+    - name: ♻️ Cache Node Modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+    # 4️⃣ Install dependencies (with legacy-peer-deps to avoid npm conflicts)
+    - name: 📦 Install Dependencies
+      run: |
+        npm install --legacy-peer-deps
+    # 5️⃣ Run Angular Build
+    - name: 🏗️ Build Angular App
+      run: |
+        npm run build -- --configuration production
+    # 6️⃣ Deploy built files to SaaS Server via SSH SCP
+    - name: 🚀 Deploy Frontend via SCP
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: root
+        key: ${{ secrets.DO_SSH_KEY }}
+        source: "dist/app/browser/*"
+        target: "/var/www/html/"
+        strip_components: 3
+        overwrite: true
+        timeout: 120s
