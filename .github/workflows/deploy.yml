@@ -1,46 +1,27 @@
-name: Frontend Deploy to SaaS Server
+name: Frontend CI/CD
 
 on:
   push:
-    branches: [ main ]
-
-env:
-  NODE_OPTIONS: --max_old_space_size=4096
+    branches:
+      - main
 
 jobs:
-  build-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout Repository
+    - name: Checkout Code (dummy)
       uses: actions/checkout@v3
 
-    - name: 🛠️ Install Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-    - name: ♻️ Cache Node Modules
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-
-    - name: 📦 Install Dependencies
-      run: |
-        npm install --legacy-peer-deps
-
-    - name: 🏗️ Build Angular App
-      run: |
-        npm run build
-
-    - name: 🚀 Deploy Frontend via SCP
-      uses: appleboy/scp-action@v0.1.4
+    - name: SSH Deploy - Pull, Build, Restart PM2
+      uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.DO_HOST }}
         username: root
         key: ${{ secrets.DO_SSH_KEY }}
-        source: dist/*
-        target: /root/assignments/PatientRecoverySystem/PatientRecoverySystem/src/PatientRecoverySystem.API/wwwroot
-        overwrite: true
-        timeout: 120s
+        script: |
+          cd /root/assignments/PATIENT-RECOVERY-FRONTEND
+          git pull
+          npm install --legacy-peer-deps
+          ng build
+          pm2 restart curevia-frontend
